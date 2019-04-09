@@ -2,5 +2,5 @@
 
 ### Contributor
 - Izuardo
-- Fais Azif
-- M Hanifan
+- [Fais Azif](https://github.com/faisz)
+- [M Hanifan](https://github.com/hanifanm)
