@@ -33,21 +33,19 @@ root = tk.Tk()
 #size of the window
 #root.geometry("1000x600")
 
-frame = tk.Frame(root, borderwidth=1,highlightbackground="black", highlightthickness=1)
+frame = tk.Frame(root, borderwidth=1)#,highlightbackground="black", highlightthickness=1)
 frame.grid(row=0,column=0)
 
 # creating a button instance
 getImageButton = Button(frame, text="Upload Query Image",command=get_image)
 getImageButton.grid(padx= 10, pady = 10,row=0,column=0)
 
-#Image
-##imageT = read_image(cv2.imread('images/F1.jpg'))
-##w1 = tk.Label(frame, image=imageT).grid(padx= 10, pady = 10,row=1,column=0)
+shapeMButton = Button(frame, text="Shape Matcher",command=test_function)
+shapeMButton.grid(padx= 10, pady = 10, row=2,column=0)
 
 shapeMatcherResult = tk.Frame(root, borderwidth=1,highlightbackground="black", highlightthickness=1)
-shapeMatcherResult.grid(row=1,column=0)
+shapeMatcherResult.grid(padx= 10, pady = 10,row=0,column=1,sticky=N)
 
-shapeMButton = Button(shapeMatcherResult, text="Shape Matcher",command=test_function)
-shapeMButton.grid(padx= 10, pady = 10, row=0,column=0)
-
+label = tk.Label(shapeMatcherResult, text= "Results will be showing here.")
+label.grid(row=0,column=0)
 root.mainloop()
