@@ -1,8 +1,14 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-import Tkinter
+from Tkinter import *
 
-top = Tkinter.Tk()
-# Code to add widgets will go here...
-top.mainloop()
+class Window(Frame):
+
+    def __init__(self, master=None):
+        Frame.__init__(self, master)               
+        self.master = master
+
+root = Tk()
+app = Window(root)
+root.mainloop()
