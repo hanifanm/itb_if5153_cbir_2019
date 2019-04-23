@@ -11,7 +11,12 @@ def client_exit():
     exit()
 
 def test_function():
-    shapeMatcherUIComm.shapeMatcher(query)
+    global matched_images
+    matched_images = []
+    matched_images = shapeMatcherUIComm.shapeMatcher(query)
+    cv2.imshow('tes', matched_images[0])
+    for i in matched_images:
+        cv2.imshow('tes', i)
 
 def read_image(img):
     #Rearrang the color channel
