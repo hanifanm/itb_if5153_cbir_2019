@@ -20,9 +20,9 @@ def shapeMatcher(query_image):
 
         m1 = cv2.matchShapes(query,im,cv2.CONTOURS_MATCH_I2,0)
         if m1 < 0.1:
-            print("Query dengan gambar ")
-            print(filename)
-            print(" : {}".format(m1))
+##            print("Query dengan gambar ")
+##            print(filename)
+##            print(" : {}".format(m1))
             results.append(cv2.imread(filename))
 
     return results
