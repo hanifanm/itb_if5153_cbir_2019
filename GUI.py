@@ -5,13 +5,13 @@ import Tkinter as tk
 from Tkinter import *
 from tkFileDialog import askopenfilename
 from PIL import Image, ImageTk
-import shapeMatcher
+import shapeMatcherUIComm
 
 def client_exit():
     exit()
 
 def test_function():
-    shapeMatcher.shapeMatcher()
+    shapeMatcherUIComm.shapeMatcher(query)
 
 def read_image(img):
     #Rearrang the color channel
@@ -24,9 +24,11 @@ def read_image(img):
 
 def get_image():
     global res
+    global query
     img= askopenfilename()
-    im = cv2.imread(img)
-    res = read_image(im)
+    query=img
+    im2 = cv2.imread(query)
+    res = read_image(im2)
     w1 = tk.Label(frame, image=res).grid(padx= 10, pady = 10,row=1,column=0)
 
 root = tk.Tk()
