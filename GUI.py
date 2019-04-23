@@ -18,7 +18,6 @@ def show_results(results):
     global reslut
     reslut = []
     for i in matched_images:
-        print counter
         im2res = imageManipulator.image_resize(i, height=100)
         reslut.append(read_image(im2res))
         r1 = tk.Label(shapeMatcherResult, image=reslut[counter]).grid(padx= 10, pady = 10,row=y,column=x)

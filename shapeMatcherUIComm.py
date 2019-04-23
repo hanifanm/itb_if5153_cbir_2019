@@ -1,5 +1,6 @@
 import cv2
 import glob
+import numpy as np
 
 def shapeMatcher(query_image):
 
@@ -9,7 +10,8 @@ def shapeMatcher(query_image):
     
     print("Shape Distances Between \n-------------------------")
     query = cv2.imread(query_image,cv2.IMREAD_GRAYSCALE)
-    results = []
+    all_results = []
+    all_distance = []
     for filename in database_images:
 
         # Obtain filename from command line argument
@@ -23,6 +25,17 @@ def shapeMatcher(query_image):
 ##            print("Query dengan gambar ")
 ##            print(filename)
 ##            print(" : {}".format(m1))
-            results.append(cv2.imread(filename))
+            all_results.append(cv2.imread(filename))
+            all_distance = np.append(all_distance, m1)
 
-    return results
+    new = np.argsort(all_distance)
+    sorted_results = []
+    counter = 0
+    for i in new:
+        sorted_results.append(all_results[i])
+        print("Distance : {}".format(all_distance[i]))
+        counter = counter + 1
+        if counter == 24:
+            break
+    return sorted_results
+    #return all_results
