@@ -14,17 +14,11 @@ def shapeMatcher(query_image):
     all_distance = []
     for filename in database_images:
 
-        # Obtain filename from command line argument
-        #filename = sys.argv[i]
-        
         # Read image
         im = cv2.imread(filename,cv2.IMREAD_GRAYSCALE)
 
         m1 = cv2.matchShapes(query,im,cv2.CONTOURS_MATCH_I2,0)
         if m1 < 0.1:
-##            print("Query dengan gambar ")
-##            print(filename)
-##            print(" : {}".format(m1))
             all_results.append(cv2.imread(filename))
             all_distance = np.append(all_distance, m1)
 
