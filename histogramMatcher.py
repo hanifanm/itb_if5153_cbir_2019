@@ -30,7 +30,7 @@ def histogram_match_from_beginning(query,result_wanted):
         hsv_test1 = cv.cvtColor(image, cv.COLOR_BGR2HSV)
 
         h_bins = 50
-        s_bins = 60
+        s_bins = 600
         histSize = [h_bins, s_bins]
 #        histSize = [h_bins]
 

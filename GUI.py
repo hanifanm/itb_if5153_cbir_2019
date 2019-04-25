@@ -169,7 +169,7 @@ def get_image():
 
 
 root = tk.Tk()
-
+root.title('Rider Finder')
 frame = tk.Frame(root, borderwidth=1)#,highlightbackground="black", highlightthickness=1)
 frame.grid(row=0,column=0, sticky=N)
 global query
@@ -180,7 +180,7 @@ button_shown = 0
 
 # creating a button instance
 getImageButton = Button(frame, text="Upload Query Image",command=get_image)
-getImageButton.grid(padx= 10, pady = 10,row=0,column=0)
+getImageButton.grid(padx= 50, pady = 10,row=0,column=0)
 
 shapeMatcherResult = tk.Frame(root, borderwidth=1,highlightbackground="black", highlightthickness=1)
 shapeMatcherResult.grid(row=0,column=1,sticky=N)
