@@ -35,7 +35,43 @@ def show_results(results):
             y = y+1
             x = 0
 
-def get_tp_fp_fn(result_codes):
+def get_precision():
+    if true_positive == 0 and false_positive == 0:
+        prec = 0
+        ptext = "Precision:\n0"
+    else:
+        prec = true_positive/(true_positive+false_positive)
+        ptext = "Precision:\n{:1.2f}".format(prec)
+    msg = tk.Message(frame, text=ptext)
+    msg.grid(row=5,column=0, sticky=W)
+    msg.config(font=('times', 15, 'italic'))
+    return prec
+
+def get_recall():
+    if true_positive == 0 and false_negative == 0:
+        rec = 0
+        ptext = "Recall: \n0"
+    else:
+        rec = true_positive/(true_positive+false_negative)
+        ptext = "Recall: \n{:1.2f}".format(rec)
+    msg2 = tk.Message(frame, text=ptext)
+    msg2.grid(row=6,column=0,sticky=W)
+    msg2.config(font=('times', 15, 'italic'))
+    return rec
+
+def get_f_measure():
+    precision = get_precision()
+    recall = get_recall()
+    if precision == 0 and recall == 0:
+        ptext = "F1-Score\n0"
+    else:
+        fmeas = 2 * (precision * recall) / (precision + recall);
+        ptext = "F1-Score:\n{:1.2f}".format(fmeas)
+    msg2 = tk.Message(frame, text=ptext)
+    msg2.grid(row=7,column=0,sticky=W)
+    msg2.config(font=('times', 15, 'italic'))
+
+def get_tp_fp_fn(relevant_data, result_codes):
     global true_positive
     global false_positive
     global false_negative
@@ -48,19 +84,8 @@ def get_tp_fp_fn(result_codes):
             true_positive = true_positive + 1
         else:
             false_positive = false_positive + 1
-    false_negative = 4 - true_positive
-
-def get_precision():
-    if true_positive == 0 and false_positive == 0:
-        return 0
-    else:
-        return true_positive/(true_positive+false_positive)
-
-def get_recall():
-    if true_positive == 0 and false_negative == 0:
-        return 0
-    else:
-        return true_positive/(true_positive+false_negative)
+    false_negative = relevant_data - true_positive
+    get_f_measure()
 
 def shape_match():
     global matched_images
@@ -68,33 +93,39 @@ def shape_match():
     matched_images = shapeMatcherUIComm.shapeMatcher(query)
     show_results(matched_images)
     codenames = shapeMatcherUIComm.get_codenames()
-    get_tp_fp_fn(codenames)
-    print("Precision: ",get_precision())
-    print("Recall: ",get_recall())
+    relevant = shapeMatcherUIComm.get_relevant_data()
+    print "Relevant data: ",relevant
+    get_tp_fp_fn(relevant, codenames)
+##    print("Precision: ",get_precision())
+##    print("Recall: ",get_recall())
 
 def histogram_match():
     global final_images
     final_images = []
-    final_images = histogramMatcher.histogram_match_from_beginning(cv2.imread(query),0)
+    final_images = histogramMatcher.histogram_match_from_beginning(query,0)
     show_results(final_images)
     codenames = histogramMatcher.get_codenames()
-    get_tp_fp_fn(codenames)
-    print("Precision: ",get_precision())
-    print("Recall: ",get_recall())
+    relevant = histogramMatcher.get_relevant_data()
+    print "Relevant data: ",relevant
+    get_tp_fp_fn(relevant, codenames)
+##    print("Precision: ",get_precision())
+##    print("Recall: ",get_recall())
 
 def all_matcher():
     global matched_images
     matched_images = []
     matched_images = shapeMatcherUIComm.shapeMatcher(query)
     codenames = shapeMatcherUIComm.get_codenames()
+    relevant = shapeMatcherUIComm.get_relevant_data()
     global final_images
     final_images = []
     final_images = histogramMatcher.histogram_match(cv2.imread(query),matched_images,codenames)
     show_results(final_images)
     codenames = histogramMatcher.get_codenames()
-    get_tp_fp_fn(codenames)
-    print("Precision: ",get_precision())
-    print("Recall: ",get_recall())
+    print "Relevant data: ",relevant
+    get_tp_fp_fn(relevant, codenames)
+##    print("Precision: ",get_precision())
+##    print("Recall: ",get_recall())
 
 def read_image(img):
     #Rearrang the color channel

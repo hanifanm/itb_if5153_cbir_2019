@@ -4,9 +4,15 @@ import glob
 
 global codenames
 codenames = []
-def histogram_match_from_beginning(query_image,method):
+global relevant_data
+relevant_data = 0
+def histogram_match_from_beginning(query,method):
+    query_image = cv.imread(query)
     global codenames
     codenames = []
+    global relevant_data
+    relevant_data = 0
+    query_code = query.split('images/',1)[1][0:4]
     src_base = query_image
     hsv_base = cv.cvtColor(src_base, cv.COLOR_BGR2HSV)
     all_results = []
@@ -15,8 +21,10 @@ def histogram_match_from_beginning(query_image,method):
     image_test = len(database_images)
     database_images = database_images[:image_test]
     all_names = []
-    print('Scores :')
+    print('Histogram Match Scores\n--------------------------------------------')
     for one_image in database_images:
+        if query_code == one_image[7:11]:
+            relevant_data = relevant_data + 1
         image = cv.imread(one_image)
         hsv_test1 = cv.cvtColor(image, cv.COLOR_BGR2HSV)
 
@@ -57,7 +65,7 @@ def histogram_match_from_beginning(query_image,method):
         sorted_results.append(all_results[new[i-1]])
         codenames.append(all_names[new[i-1]][7:11])
         #print("Image: ",all_names[new[i-1]][7:11])
-        print("Similarity : {}".format(all_distance[new[i-1]]))
+        print("Histogram Similarity: {}".format(all_distance[new[i-1]]))
         counter = counter + 1
         if counter == 24:
             break
@@ -66,6 +74,9 @@ def histogram_match_from_beginning(query_image,method):
 
 def get_codenames():
     return codenames
+
+def get_relevant_data():
+    return relevant_data
 
 def histogram_match(query_image, shape_matched_images, prev_codenames):
     global codenames
@@ -76,7 +87,7 @@ def histogram_match(query_image, shape_matched_images, prev_codenames):
     all_results = []
     all_distance = []
     all_names = []
-    print('Scores :')
+    print('Histogram Match Scores\n--------------------------------------------')
     counter = 0;
     for image in shape_matched_images:
         hsv_test1 = cv.cvtColor(image, cv.COLOR_BGR2HSV)
@@ -115,7 +126,7 @@ def histogram_match(query_image, shape_matched_images, prev_codenames):
     while i > 0:
         sorted_results.append(all_results[new[i-1]])
         codenames.append(all_names[new[i-1]])
-        print("Similarity : {}".format(all_distance[new[i-1]]))
+        print("Histogram Similarity: {}".format(all_distance[new[i-1]]))
         counter = counter + 1
         if counter == 12:
             break
