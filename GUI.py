@@ -13,6 +13,8 @@ import histogramMatcher
 global true_positive
 global false_positive
 global false_negative
+global result_wanted
+result_wanted = 12
 
 def client_exit():
     exit()
@@ -90,7 +92,7 @@ def get_tp_fp_fn(relevant_data, result_codes):
 def shape_match():
     global matched_images
     matched_images = []
-    matched_images = shapeMatcherUIComm.shapeMatcher(query)
+    matched_images = shapeMatcherUIComm.shapeMatcher(query,result_wanted)
     show_results(matched_images)
     codenames = shapeMatcherUIComm.get_codenames()
     relevant = shapeMatcherUIComm.get_relevant_data()
@@ -102,7 +104,7 @@ def shape_match():
 def histogram_match():
     global final_images
     final_images = []
-    final_images = histogramMatcher.histogram_match_from_beginning(query,0)
+    final_images = histogramMatcher.histogram_match_from_beginning(query,result_wanted)
     show_results(final_images)
     codenames = histogramMatcher.get_codenames()
     relevant = histogramMatcher.get_relevant_data()
@@ -114,12 +116,12 @@ def histogram_match():
 def all_matcher():
     global matched_images
     matched_images = []
-    matched_images = shapeMatcherUIComm.shapeMatcher(query)
+    matched_images = shapeMatcherUIComm.shapeMatcher(query,30)
     codenames = shapeMatcherUIComm.get_codenames()
     relevant = shapeMatcherUIComm.get_relevant_data()
     global final_images
     final_images = []
-    final_images = histogramMatcher.histogram_match(cv2.imread(query),matched_images,codenames)
+    final_images = histogramMatcher.histogram_match(cv2.imread(query),matched_images,result_wanted,codenames)
     show_results(final_images)
     codenames = histogramMatcher.get_codenames()
     print "Relevant data: ",relevant

@@ -6,7 +6,7 @@ global codenames
 codenames = []
 global relevant_data
 relevant_data = 0
-def shapeMatcher(query_image):
+def shapeMatcher(query_image, result_wanted):
 
     global codenames
     codenames = []
@@ -45,7 +45,7 @@ def shapeMatcher(query_image):
         #print("Distance : {}".format(all_distance[i]), "Code: ", (all_names[i][7:11]))
         print("Shape Distance : {}".format(all_distance[i]))
         counter = counter + 1
-        if counter == 24:
+        if counter == result_wanted:
             break
     return sorted_results
     #return all_results

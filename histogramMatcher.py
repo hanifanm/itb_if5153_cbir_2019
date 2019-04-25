@@ -6,7 +6,8 @@ global codenames
 codenames = []
 global relevant_data
 relevant_data = 0
-def histogram_match_from_beginning(query,method):
+def histogram_match_from_beginning(query,result_wanted):
+    method=0
     query_image = cv.imread(query)
     global codenames
     codenames = []
@@ -67,7 +68,7 @@ def histogram_match_from_beginning(query,method):
         #print("Image: ",all_names[new[i-1]][7:11])
         print("Histogram Similarity: {}".format(all_distance[new[i-1]]))
         counter = counter + 1
-        if counter == 24:
+        if counter == result_wanted:
             break
         i = i - 1
     return sorted_results
@@ -78,7 +79,7 @@ def get_codenames():
 def get_relevant_data():
     return relevant_data
 
-def histogram_match(query_image, shape_matched_images, prev_codenames):
+def histogram_match(query_image, shape_matched_images, result_wanted, prev_codenames):
     global codenames
     codenames = []
     method = 0
@@ -128,7 +129,7 @@ def histogram_match(query_image, shape_matched_images, prev_codenames):
         codenames.append(all_names[new[i-1]])
         print("Histogram Similarity: {}".format(all_distance[new[i-1]]))
         counter = counter + 1
-        if counter == 12:
+        if counter == result_wanted:
             break
         i = i - 1
     return sorted_results
