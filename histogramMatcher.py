@@ -2,7 +2,11 @@ import cv2 as cv
 import numpy as np
 import glob
 
+global codenames
+codenames = []
 def histogram_match_from_beginning(query_image,method):
+    global codenames
+    codenames = []
     src_base = query_image
     hsv_base = cv.cvtColor(src_base, cv.COLOR_BGR2HSV)
     all_results = []
@@ -10,6 +14,7 @@ def histogram_match_from_beginning(query_image,method):
     database_images = glob.glob('images/*')
     image_test = len(database_images)
     database_images = database_images[:image_test]
+    all_names = []
     print('Scores :')
     for one_image in database_images:
         image = cv.imread(one_image)
@@ -41,6 +46,7 @@ def histogram_match_from_beginning(query_image,method):
             if base_test1 > 0.8:
                 all_results.append(image)
                 all_distance = np.append(all_distance, base_test1)
+                all_names.append(one_image)
 ##        print(base_test1)
 
     new = np.argsort(all_distance)
@@ -49,6 +55,8 @@ def histogram_match_from_beginning(query_image,method):
     i = len(new)
     while i > 0:
         sorted_results.append(all_results[new[i-1]])
+        codenames.append(all_names[new[i-1]][7:11])
+        #print("Image: ",all_names[new[i-1]][7:11])
         print("Similarity : {}".format(all_distance[new[i-1]]))
         counter = counter + 1
         if counter == 24:
@@ -56,13 +64,20 @@ def histogram_match_from_beginning(query_image,method):
         i = i - 1
     return sorted_results
 
+def get_codenames():
+    return codenames
 
-def histogram_match(query_image, shape_matched_images, method):
+def histogram_match(query_image, shape_matched_images, prev_codenames):
+    global codenames
+    codenames = []
+    method = 0
     src_base = query_image
     hsv_base = cv.cvtColor(src_base, cv.COLOR_BGR2HSV)
     all_results = []
     all_distance = []
+    all_names = []
     print('Scores :')
+    counter = 0;
     for image in shape_matched_images:
         hsv_test1 = cv.cvtColor(image, cv.COLOR_BGR2HSV)
 
@@ -89,6 +104,8 @@ def histogram_match(query_image, shape_matched_images, method):
             if base_test1 > 0.8:
                 all_results.append(image)
                 all_distance = np.append(all_distance, base_test1)
+                all_names.append(prev_codenames[counter])
+        counter = counter + 1
 ##        print(base_test1)
 
     new = np.argsort(all_distance)
@@ -97,9 +114,10 @@ def histogram_match(query_image, shape_matched_images, method):
     i = len(new)
     while i > 0:
         sorted_results.append(all_results[new[i-1]])
+        codenames.append(all_names[new[i-1]])
         print("Similarity : {}".format(all_distance[new[i-1]]))
         counter = counter + 1
-        if counter == 24:
+        if counter == 12:
             break
         i = i - 1
     return sorted_results
