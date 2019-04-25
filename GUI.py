@@ -14,6 +14,7 @@ global true_positive
 global false_positive
 global false_negative
 global result_wanted
+global button_shown
 result_wanted = 12
 
 def client_exit():
@@ -45,7 +46,7 @@ def get_precision():
         prec = true_positive/(true_positive+false_positive)
         ptext = "Precision:\n{:1.2f}".format(prec)
     msg = tk.Message(frame, text=ptext)
-    msg.grid(row=5,column=0, sticky=W)
+    msg.grid(row=6,column=0, sticky=W)
     msg.config(font=('times', 15, 'italic'))
     return prec
 
@@ -57,7 +58,7 @@ def get_recall():
         rec = true_positive/(true_positive+false_negative)
         ptext = "Recall: \n{:1.2f}".format(rec)
     msg2 = tk.Message(frame, text=ptext)
-    msg2.grid(row=6,column=0,sticky=W)
+    msg2.grid(row=7,column=0,sticky=W)
     msg2.config(font=('times', 15, 'italic'))
     return rec
 
@@ -70,7 +71,7 @@ def get_f_measure():
         fmeas = 2 * (precision * recall) / (precision + recall);
         ptext = "F1-Score:\n{:1.2f}".format(fmeas)
     msg2 = tk.Message(frame, text=ptext)
-    msg2.grid(row=7,column=0,sticky=W)
+    msg2.grid(row=8,column=0,sticky=W)
     msg2.config(font=('times', 15, 'italic'))
 
 def get_tp_fp_fn(relevant_data, result_codes):
@@ -92,7 +93,7 @@ def get_tp_fp_fn(relevant_data, result_codes):
 def shape_match():
     global matched_images
     matched_images = []
-    matched_images = shapeMatcherUIComm.shapeMatcher(query,result_wanted)
+    matched_images = shapeMatcherUIComm.shapeMatcher(query,number_of_result.get())
     show_results(matched_images)
     codenames = shapeMatcherUIComm.get_codenames()
     relevant = shapeMatcherUIComm.get_relevant_data()
@@ -104,7 +105,7 @@ def shape_match():
 def histogram_match():
     global final_images
     final_images = []
-    final_images = histogramMatcher.histogram_match_from_beginning(query,result_wanted)
+    final_images = histogramMatcher.histogram_match_from_beginning(query,number_of_result.get())
     show_results(final_images)
     codenames = histogramMatcher.get_codenames()
     relevant = histogramMatcher.get_relevant_data()
@@ -121,7 +122,7 @@ def all_matcher():
     relevant = shapeMatcherUIComm.get_relevant_data()
     global final_images
     final_images = []
-    final_images = histogramMatcher.histogram_match(cv2.imread(query),matched_images,result_wanted,codenames)
+    final_images = histogramMatcher.histogram_match(cv2.imread(query),matched_images,number_of_result.get(),codenames)
     show_results(final_images)
     codenames = histogramMatcher.get_codenames()
     print "Relevant data: ",relevant
@@ -139,14 +140,20 @@ def read_image(img):
     return imgtk
 
 def show_buttons():
+    global button_shown
+    button_shown = 1
+    global number_of_result
+    number_of_result = Scale(frame, from_=1, to=30, orient=HORIZONTAL)
+    number_of_result.grid(row=1,column=0)
+
     shapeMButton = Button(frame, text="Shape Matcher",command=shape_match)
-    shapeMButton.grid(padx= 10, pady = 10, row=2,column=0)
+    shapeMButton.grid(padx= 5, pady = 5, row=3,column=0)
 
     shapeMButton = Button(frame, text="Histogram Matcher",command=histogram_match)
-    shapeMButton.grid(padx= 10, pady = 10, row=3,column=0)
+    shapeMButton.grid(padx= 5, pady = 5, row=4,column=0)
 
     shapeMButton = Button(frame, text="UltiMatcher",command=all_matcher)
-    shapeMButton.grid(padx= 10, pady = 10, row=4,column=0)
+    shapeMButton.grid(padx= 5, pady = 5, row=5,column=0)
 
 def get_image():
     global res
@@ -156,8 +163,9 @@ def get_image():
     im2 = cv2.imread(query)
     im2res = imageManipulator.image_resize(im2, height=100)
     res = read_image(im2res)
-    w1 = tk.Label(frame, image=res).grid(padx= 10, pady = 10,row=1,column=0)
-    show_buttons()
+    w1 = tk.Label(frame, image=res).grid(padx= 10, pady = 10,row=2,column=0)
+    if button_shown==0:
+        show_buttons()
 
 
 root = tk.Tk()
@@ -167,6 +175,8 @@ frame.grid(row=0,column=0, sticky=N)
 global query
 global matched_images
 matched_images = []
+global number_of_result
+button_shown = 0
 
 # creating a button instance
 getImageButton = Button(frame, text="Upload Query Image",command=get_image)
