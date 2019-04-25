@@ -25,4 +25,3 @@ def shapeMatcher():
     print("F1.jpg dengan F5.jpeg : {}".format(m5))
     print("F1.jpg dengan O1.jpg : {}".format(m6))
 
-
