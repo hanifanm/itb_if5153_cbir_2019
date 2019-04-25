@@ -18,14 +18,17 @@ def histogram_match_from_beginning(query_image,method):
         h_bins = 50
         s_bins = 60
         histSize = [h_bins, s_bins]
+#        histSize = [h_bins]
 
         # hue varies from 0 to 179, saturation from 0 to 255
         h_ranges = [0, 180]
         s_ranges = [0, 256]
         ranges = h_ranges + s_ranges # concat lists
+#        ranges = h_ranges # concat lists
 
         # Use the 0-th and 1-st channels
-        channels = [0, 1]
+        channels = [0, 2]
+#        channels = [0]
 
 
         hist_base = cv.calcHist([hsv_base], channels, None, histSize, ranges, accumulate=False)
