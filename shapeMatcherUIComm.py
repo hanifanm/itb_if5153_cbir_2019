@@ -20,7 +20,7 @@ def shapeMatcher(query_image, result_wanted):
     database_images = glob.glob('images/*')
     image_test = len(database_images)
     database_images = database_images[:image_test]
-    
+
     print("Shape Distances Between \n--------------------------------------------")
     query = cv2.imread(query_image,cv2.IMREAD_GRAYSCALE)
     all_results = []
@@ -64,13 +64,13 @@ def shapeMatcherAndHog(query_image, result_wanted):
     database_images = glob.glob('images/*')
     image_test = len(database_images)
     database_images = database_images[:image_test]
-    
+
     print("Shape Distances Between \n--------------------------------------------")
     query = cv2.imread(query_image)
 
-    fd, query = hog(query, orientations=8, pixels_per_cell=(3, 3), cells_per_block=(1, 1), block_norm='L2-Hys', visualize=True, multichannel=True)
-    query = exposure.rescale_intensity(query, in_range=(0, 10))
-    
+    fd, query = hog(query, orientations=8, pixels_per_cell=(2, 2), cells_per_block=(1, 1), block_norm='L2-Hys', visualize=True, multichannel=True)
+    ##query = exposure.rescale_intensity(query, in_range=(0, 10))
+
     all_results = []
     all_distance = []
     all_names = []
@@ -82,10 +82,10 @@ def shapeMatcherAndHog(query_image, result_wanted):
         im = cv2.imread(filename)
 
         # Calculate HOG
-        fd, hog_image = hog(im, orientations=8, pixels_per_cell=(3, 3), cells_per_block=(1, 1), block_norm='L2-Hys', visualize=True, multichannel=True)
-        hog_image_rescaled = exposure.rescale_intensity(hog_image, in_range=(0, 10))
+        fd, hog_image = hog(im, orientations=8, pixels_per_cell=(2, 2), cells_per_block=(1, 1), block_norm='L2-Hys', visualize=True, multichannel=True)
+        ##hog_image_rescaled = exposure.rescale_intensity(hog_image, in_range=(0, 10))
 
-        m1 = cv2.matchShapes(query,hog_image_rescaled,cv2.CONTOURS_MATCH_I2,0)
+        m1 = cv2.matchShapes(query,hog_image,cv2.CONTOURS_MATCH_I2,0)
         print('Processing : {} with value {}'.format(filename, m1))
         if m1 < 10:
             all_results.append(cv2.imread(filename))
@@ -99,7 +99,7 @@ def shapeMatcherAndHog(query_image, result_wanted):
         sorted_results.append(all_results[i])
         codenames.append(all_names[i][7:11])
         #print("Distance : {}".format(all_distance[i]), "Code: ", (all_names[i][7:11]))
-        print("Shape Distance : {}".format(all_distance[i]))
+        print("Shape Distance : {}, filename: {}".format(all_distance[i], all_names[i]))
         counter = counter + 1
         if counter == result_wanted:
             break
