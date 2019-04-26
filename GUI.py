@@ -102,6 +102,18 @@ def shape_match():
 ##    print("Precision: ",get_precision())
 ##    print("Recall: ",get_recall())
 
+def shape_match_and_hog():
+    global matched_images
+    matched_images = []
+    matched_images = shapeMatcherUIComm.shapeMatcherAndHog(query,number_of_result.get())
+    show_results(matched_images)
+    codenames = shapeMatcherUIComm.get_codenames()
+    relevant = shapeMatcherUIComm.get_relevant_data()
+    print "Relevant data: ",relevant
+    get_tp_fp_fn(relevant, codenames)
+##    print("Precision: ",get_precision())
+##    print("Recall: ",get_recall())
+
 def histogram_match():
     global final_images
     final_images = []
@@ -114,10 +126,13 @@ def histogram_match():
 ##    print("Precision: ",get_precision())
 ##    print("Recall: ",get_recall())
 
-def all_matcher():
+def all_matcher(withHog = False):
     global matched_images
     matched_images = []
-    matched_images = shapeMatcherUIComm.shapeMatcher(query,30)
+    if(withHog):
+        matched_images = shapeMatcherUIComm.shapeMatcherAndHog(query,30)
+    else:
+        matched_images = shapeMatcherUIComm.shapeMatcher(query,30)
     codenames = shapeMatcherUIComm.get_codenames()
     relevant = shapeMatcherUIComm.get_relevant_data()
     global final_images
@@ -148,12 +163,18 @@ def show_buttons():
 
     shapeMButton = Button(frame, text="Shape Matcher",command=shape_match)
     shapeMButton.grid(padx= 5, pady = 5, row=3,column=0)
+    
+    shapeMButton = Button(frame, text="HOG + Shape Matcher",command=shape_match_and_hog)
+    shapeMButton.grid(padx= 5, pady = 5, row=3,column=1)
 
     shapeMButton = Button(frame, text="Histogram Matcher",command=histogram_match)
     shapeMButton.grid(padx= 5, pady = 5, row=4,column=0)
 
     shapeMButton = Button(frame, text="UltiMatcher",command=all_matcher)
     shapeMButton.grid(padx= 5, pady = 5, row=5,column=0)
+
+    shapeMButton = Button(frame, text="UltiMatcher",command=lambda : all_matcher(True))
+    shapeMButton.grid(padx= 5, pady = 5, row=5,column=1)
 
 def get_image():
     global res
