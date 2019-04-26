@@ -173,7 +173,7 @@ def show_buttons():
     shapeMButton = Button(frame, text="UltiMatcher",command=all_matcher)
     shapeMButton.grid(padx= 5, pady = 5, row=5,column=0)
 
-    shapeMButton = Button(frame, text="UltiMatcher",command=lambda : all_matcher(True))
+    shapeMButton = Button(frame, text="SuperUltiMatcher",command=lambda : all_matcher(True))
     shapeMButton.grid(padx= 5, pady = 5, row=5,column=1)
 
 def get_image():
